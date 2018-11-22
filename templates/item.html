@@ -1,0 +1,19 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+	<div class="row details banner menu">
+		<div class="col-md-8 ">
+			<div>
+				<h1>{{item.name}}</h1>
+				<p>
+					{{item.description}}
+				</p>
+			</div>
+			<a href="{{url_for('editItem', item_id = item.id, category_id = item.category_id)}}"> edit </a> | <a href="{{url_for('deleteItem', category_id=item.category_id, item_id = item.id)}}"> delete </a>
+		</div>
+	</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row divider green">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner menu">
+		<div class="col-md-11 col-md-offset-1 padding-none">
+			<h1>Edit {{ item.name }}</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-1 padding-top">
+			<form action="{{url_for('editItem', item_id = item.id, category_id = item.category_id)}}" method = "post">
+				<div class="form-group">
+				<label for="name">Item Name:</label>
+				<input type ="text" class="form-control" maxlength="100" value="{{item.name}}" name="name">
+				<div class="padding-bottom"></div>
+				<label for="name">Description:</label>
+				<input type ="textarea" class="form-control"value="{{item.description}}"  name="description">
+				<div class="padding-bottom"></div>
+				<select name="category">
+					{% for category in categories %}
+						 <option> {{category.name}} </option>
+					{% endfor %}
+				</select>
+				<div class="padding-bottom"></div>
+				<input type="submit" type="submit" value="Edit!"/>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}
