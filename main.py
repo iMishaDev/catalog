@@ -193,11 +193,11 @@ def gdisconnect():
 
 
 # JSON APIs to view Items Information
-@app.route('/category/<int:category_id>/JSON')
-def itemsJSON(category_id):
-    category = session.query(Category).filter_by(id=category_id).one()
-    items = session.query(Item).filter_by(category_id=category_id).all()
-    return jsonify(Item=[i.serialize for i in items])
+@app.route('/category/JSON')
+def categoriesJSON():
+    categories = session.query(Category).all()
+    return jsonify(categories=[r.serialize for r in categories])
+
 
 
 @app.route('/category/<int:category_id>/items/<int:item_id>/JSON')
@@ -206,11 +206,22 @@ def itemJSON(category_id, item_id):
     return jsonify(item=item.serialize)
 
 
-@app.route('/category/JSON')
-def restaurantsJSON():
-    categories = session.query(Category).all()
-    return jsonify(categories=[r.serialize for r in categories])
+@app.route('/category/<int:category_id>/items/JSON')
+def itemsJSON(category_id):
+    items = session.query(Item).filter_by(category_id=category_id).all()
+    return jsonify(items=[i.serialize for i in items])
 
+
+@app.route('/catalog/JSON')
+def catalogJSON():
+    categories = session.query(Category).all()
+    categoryJSON = [c.serialize for c in categories]
+    for c in range(len(categoryJSON)):
+        items = [i.serialize for i in session.query(Item)
+                .filter_by(category_id=categoryJSON[c]["id"]).all()]
+        if items:
+            categoryJSON[c]["i"] = items
+    return jsonify(Category=categoryJSON)
 
 # Show all restaurants
 @app.route('/')
