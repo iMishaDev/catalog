@@ -1,18 +1,12 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-	<div class="row top-menu">
-		<div class="col-md-10"></div>
-		<div class="col-md-2 text-right">
-					</div>
-	</div>
-
 	<div class="row banner main">
 		<div class="col-md-11 padding-none">
 			<h2>Categories</h2>
 		</div>
 		<div class="col-md-1 padding-none">
-			<a href="{{url_for('newItem')}}"> <h2>Add Item</h2>  </a>
+			<a href="{{url_for('newItem')}}"> <i class="fas fa-plus-square fa-3x"></i>  </a>
 		</div>
 	</div>
 <div class = 'flash'>
@@ -31,19 +25,19 @@
 
 
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-3 banner menu">
 			{% for category in categories %}
-			<div class="restaurant-list ">
+			<div class="item-list ">
 				<a href = "{{url_for('showItems', category_id = category.id)}}">
-
-
-				{% if chosen_category %}
-					{% if chosen_category.name == category.name %}
-					<h3 style="color:yellow">{{category.name}}</h3>
-					{% endif %}
-				{%else%}
-				<h3>{{category.name}}</h3>
-				{% endif %}
+					{% if selected_category %}
+						{% if selected_category.name == category.name %}
+								<h3 style="color:yellow">{{category.name}}</h3>
+						{% else %}
+						<h3>{{category.name}}</h3>
+						{% endif%}
+					{% else %}
+						<h3>{{category.name}}</h3>
+					{% endif%}
 			</a>
 			</div>
 			{% endfor %}
@@ -51,9 +45,9 @@
 			</div>
 			<div class="col-md-9">
 				{% for item in items %}
-				<a href="{{url_for('showItem', item_id = item.id,category_id = item.category_id)}}"><h4>{{item.name}}</h4></a>
+				<span class="list"><a href="{{url_for('showItem', item_id = item.id,category_id = item.category_id)}}"><h4>{{item.name}} <span style="color:#F7E53E;"> -{{item.category.name}}</span></h4></a></span>
 				{% endfor %}
-			</div> 
+			</div>
 	</div>
 
 {% endblock %}

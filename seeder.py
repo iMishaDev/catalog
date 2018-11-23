@@ -18,8 +18,7 @@ DBSession = sessionmaker(bind=engine)
 # session.rollback()
 session = DBSession()
 
-User1 = User(name="Misha", email="misha@udacity.com",
-             picture='https://pbs.twimg.com/profile_images/2671170543/18debd694829ed78203a5a36dd364160_400x400.png')
+User1 = User(name="Misha", email="misha@udacity.com",picture='https://pbs.twimg.com/profile_images/2671170543/18debd694829ed78203a5a36dd364160_400x400.png')
 session.add(User1)
 session.commit()
 # item catalog

@@ -48,8 +48,9 @@ def gconnect():
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    # Obtain authorization code
-    code = request.data
+    # Obtain authorization code, now compatible with Python3
+    request.get_data()
+    code = request.data.decode('utf-8')
 
     try:
         # Upgrade the authorization code into a credentials object
@@ -66,8 +67,12 @@ def gconnect():
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
            % access_token)
+    # Submit request, parse response - Python3 compatible
     h = httplib2.Http()
-    result = json.loads(h.request(url, 'GET')[1])
+    response = h.request(url, 'GET')[1]
+    str_response = response.decode('utf-8')
+    result = json.loads(str_response)
+
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
         response = make_response(json.dumps(result.get('error')), 500)
@@ -86,7 +91,6 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -99,12 +103,12 @@ def gconnect():
         return response
 
     # Store the access token in the session for later use.
-    login_session['access_token'] = credentials.access_token
+    login_session['access_token'] = access_token
     login_session['gplus_id'] = gplus_id
 
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-    params = {'access_token': credentials.access_token, 'alt': 'json'}
+    params = {'access_token': access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
 
     data = answer.json()
@@ -113,10 +117,11 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    # see if user exists, if it doesn't make a new one
     user_id = getUserID(login_session['email'])
     if not user_id:
-        user_id  = createUser(login_session)
-        login_session['user_id'] = user_id
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
 
     output = ''
     output += '<h1>Welcome, '
@@ -126,7 +131,6 @@ def gconnect():
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
     return output
 
 
@@ -199,7 +203,7 @@ def itemsJSON(category_id):
 @app.route('/category/<int:category_id>/items/<int:item_id>/JSON')
 def itemJSON(category_id, item_id):
     item = session.query(Item).filter_by(id=item_id, category_id=category_id).one()
-    return jsonify(item=Item.serialize)
+    return jsonify(item=item.serialize)
 
 
 @app.route('/category/JSON')
@@ -294,18 +298,18 @@ def showItems(category_id):
     categories = session.query(Category).all()
     category = session.query(Category).filter_by(id=category_id).one()
     items = session.query(Item).filter_by(category_id=category_id).all()
-    return render_template('home.html', items=items, categories=categories, chosen_category=category)
+    return render_template('home.html', items=items, categories=categories, selected_category=category)
 
 
 @app.route('/category/<int:category_id>/items/<int:item_id>')
 def showItem(category_id, item_id):
     if 'username' not in login_session:
         item = session.query(Item).filter_by(category_id=category_id, id=item_id).one()
-        #return render_template('item.html', item=item)
         return render_template('public_item.html', item=item)
     else:
         item = session.query(Item).filter_by(category_id=category_id, id=item_id).one()
-        #return render_template('item.html', item=item)
+        if item.user_id != login_session['user_id']:
+            return render_template('public_item.html', item=item)
         return render_template('item.html', item=item)
 
 

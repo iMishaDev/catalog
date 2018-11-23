@@ -1,11 +1,6 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "public_header.html" %}
-	<div class="row top-menu">
-		<div class="col-md-10"></div>
-		<div class="col-md-2 text-right">
-					</div>
-	</div>
 
 	<div class="row banner main">
 		<div class="col-md-11 padding-none">
@@ -13,46 +8,24 @@
 		</div>
 	</div>
 
-<div class = 'flash'>
-		      {% with messages = get_flashed_messages() %}
-      {% if messages %}
-
-        <ul>
-        {% for message in messages %}
-            <li> <strong> {{ message }} </strong> </li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-    {% endwith %}
-
-</div>
-
 
 
 	<div class="row">
 		<div class="col-md-3">
 			{% for category in categories %}
-			<div class="restaurant-list ">
+			<div class="item-list ">
 				<a href = "{{url_for('showItems', category_id = category.id)}}">
-
-
-				{% if chosen_category %}
-					{% if chosen_category.name == category.name %}
-					<h3 style="color:yellow">{{category.name}}</h3>
-					{% endif %}
-				{%else%}
-				<h3>{{category.name}}</h3>
-				{% endif %}
-			</a>
+					<h3>{{category.name}}</h3>
+				</a>
 			</div>
 			{% endfor %}
 
 			</div>
 			<div class="col-md-9">
 				{% for item in items %}
-				<a href="{{url_for('showItem', item_id = item.id,category_id = item.category_id)}}"><h4>{{item.name}}</h4></a>
+				<span class="list"><a href="{{url_for('showItem', item_id = item.id,category_id = item.category_id)}}"><h4>{{item.name}} <span style="color:#F7E53E;"> -{{item.category.name}}</span></h4></a></span>
 				{% endfor %}
-			</div> 
+			</div>
 	</div>
 
 {% endblock %}

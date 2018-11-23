@@ -7,6 +7,7 @@ body{
 		background-color:black;
 		color:white;
 		padding: 30px;
+		margin: auto;
 }
 h1 {
 	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
@@ -49,9 +50,17 @@ h3 {
 
  a:hover {
  	font-size: 14px;
-	color:yellow;
+	color:#F7E53E;
  	line-height: 17px;
 	text-decoration: none;
+ }
+
+ i {
+	 color:#F7E53E;
+ }
+
+ .list{
+	 padding-bottom:15px;
  }
 .padding-top {
 	padding-top: 30px;
@@ -84,12 +93,7 @@ h3 {
 	font-size: 16px;
 	font-weight: 400;
 }
-.divider {
-	height: 15px;
-}
-.divider.blue {
-	background-color: #42C3C9;
-}
+
 
 .banner.main {
 	background: url("/static/top-banner.jpg");
@@ -97,23 +101,21 @@ h3 {
 	background-repeat: no-repeat;
 	background-size: cover;
 }
+
+
 .banner.menu {
-	height: 150px;
 	background-color: rgba(255, 255, 255, 0.2);
 	border-radius: 5px;
 }
-.banner.profile {
-	height: 150px;
-	background-color: #A6E8EB;
-}
+
 .banner h1 {
 	margin: 45px 0;
 }
- .restaurant-list {
+ .item-list {
 	color:white;
  	padding: 10px;
  }
- .restaurant-list:hover {
+ .item-list:hover {
  	background-color: lightgray;
  	padding: 10px;
 }
@@ -173,7 +175,9 @@ input[type=text], select, input[type=textarea]{
     box-sizing: border-box;
 }
 
-
+#signinButton {
+display: inline-block;
+}
 input[type=submit] {
     width: 100%;
     background-color: #F7E53E;
