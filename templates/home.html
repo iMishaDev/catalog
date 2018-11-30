@@ -5,9 +5,11 @@
 		<div class="col-md-11 padding-none">
 			<h2>Categories</h2>
 		</div>
+		{% if user %}
 		<div class="col-md-1 padding-none">
 			<a href="{{url_for('newItem')}}"> <i class="fas fa-plus-square fa-3x"></i>  </a>
 		</div>
+		{% endif %}
 	</div>
 <div class = 'flash'>
 		      {% with messages = get_flashed_messages() %}

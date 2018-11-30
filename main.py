@@ -265,18 +265,14 @@ def showCategories():
             home page with addition option shows up
             with the list of categories.
     """
+    user = True
     if 'username' not in login_session:
-        categories = session.query(Category).all()
-        items_limited = session.query(Item).order_by(Item.id.desc()).limit(8)
-        items = items_limited[::1]
-        return render_template('public_home.html',
-                               categories=categories, items=items)
-    else:
-        categories = session.query(Category).all()
-        items_limited = session.query(Item).order_by(Item.id.desc()).limit(8)
-        items = items_limited[::1]
-        return render_template('home.html',
-                               categories=categories, items=items)
+        user = False
+    categories = session.query(Category).all()
+    items_limited = session.query(Item).order_by(Item.id.desc()).limit(8)
+    items = items_limited[::1]
+    return render_template('home.html',
+                               categories=categories, items=items,user=user)
 
 
 # route to list specific category items
@@ -314,18 +310,17 @@ def showItem(category_id, item_id):
             user logged in? not the owner of this item?
             shows item detail without the ability to modify it
     """
+    user = True
+    creator = True
     if 'username' not in login_session:
-        item = session.query(Item).filter_by(
+        user = False
+        creator = False
+    item = session.query(Item).filter_by(
             category_id=category_id,
             id=item_id).one()
-        return render_template('public_item.html', item=item)
-    else:
-        item = session.query(Item).filter_by(
-            category_id=category_id,
-            id=item_id).one()
-        if item.user_id != login_session['user_id']:
-            return render_template('public_item.html', item=item)
-        return render_template('item.html', item=item)
+    if item.user_id != login_session['user_id']:
+        creator = False
+    return render_template('item.html', item=item,user=user,creator=creator)
 
 
 # route to create a new item
