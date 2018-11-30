@@ -188,3 +188,10 @@ input[type=submit] {
     border-radius: 4px;
     cursor: pointer;
 }
+
+
+
+button {
+	background-color: transparent;
+	border: none;
+}

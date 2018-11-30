@@ -14,12 +14,12 @@
 			<form action="{{url_for('editItem', item_id = item.id, category_id = item.category_id)}}" method = "post">
 				<div class="form-group">
 				<label for="name">Item Name:</label>
-				<input type ="text" class="form-control" maxlength="100" value="{{item.name}}" name="name">
+				<input type ="text" class="form-control" maxlength="100" value="{{item.name}}" name="name" required>
 				<div class="padding-bottom"></div>
 				<label for="name">Description:</label>
-				<input type ="textarea" class="form-control"value="{{item.description}}"  name="description">
+				<input type ="textarea" class="form-control"value="{{item.description}}"  name="description" required>
 				<div class="padding-bottom"></div>
-				<select name="category">
+				<select name="category" required>
 					{% for category in categories %}
 						 <option> {{category.name}} </option>
 					{% endfor %}

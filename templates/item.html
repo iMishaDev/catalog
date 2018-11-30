@@ -10,7 +10,13 @@
 					{{item.description}}
 				</p>
 			</div>
-			<a href="{{url_for('editItem', item_id = item.id, category_id = item.category_id)}}"> edit </a> | <a href="{{url_for('deleteItem', category_id=item.category_id, item_id = item.id)}}"> delete </a>
+			<div style="display:flex;">
+				<a style="paddng:4px;" href="{{url_for('editItem', item_id = item.id, category_id = item.category_id)}}"> edit </a>   |
+				<form method="POST" action="{{url_for('deleteItem', category_id=item.category_id, item_id = item.id)}}" >
+					<button type="submit"> delete </button>
+				</form>
+			</div>
+
 		</div>
 	</div>
 
