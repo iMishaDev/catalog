@@ -4,6 +4,7 @@ from item_catalog_set_up import Base, Category, Item, User
 from flask import session as login_session
 import random
 import string
+from sqlalchemy.pool import SingletonThreadPool
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -20,8 +21,8 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Item Catalog Application"
 
+engine = create_engine('sqlite:///items_catalog.db?check_same_thread=False', poolclass=SingletonThreadPool)
 
-engine = create_engine('sqlite:///items_catalog.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -416,4 +417,4 @@ def deleteItem(item_id, category_id):
 if __name__ == '__main__':
     app.secret_key = '_0Envh5BXSTjIk5QNDzDM8WQ'
     app.debug = True
-    app.run(host='0.0.0.0', port=2090)
+    app.run(host='0.0.0.0', port=5000)
